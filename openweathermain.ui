@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>main</class>
- <widget class="QWidget" name="main">
+ <class>OpenWeather</class>
+ <widget class="QWidget" name="OpenWeather">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -41,6 +41,9 @@
     </rect>
    </property>
    <layout class="QHBoxLayout" name="HeaderHLayout">
+    <property name="sizeConstraint">
+     <enum>QLayout::SetMinimumSize</enum>
+    </property>
     <item>
      <widget class="QLabel" name="header">
       <property name="enabled">
@@ -99,6 +102,9 @@
     </item>
     <item>
      <widget class="QLabel" name="status">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <property name="minimumSize">
        <size>
         <width>75</width>

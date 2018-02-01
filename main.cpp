@@ -1,16 +1,14 @@
 #include <QApplication>
-#include <QPushButton>
 
-#include "ui_openweathermain.h"
+#include "openweather.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    QWidget w;
 
-    Ui::main ui;
-    ui.setupUi(&w);
-    w.showFullScreen();
+    OpenWeather *openWeather = new OpenWeather();
+
+    openWeather->showFullScreen();
 
     return a.exec();
 }
