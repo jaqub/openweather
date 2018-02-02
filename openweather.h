@@ -4,10 +4,12 @@
 #include <QObject>
 #include <QWidget>
 #include <QtNetwork>
+#include <QMovie>
 
 #include "ui_openweathermain.h"
 
-class OpenWeather : public QWidget, public Ui::OpenWeather
+class OpenWeather : public QWidget,
+                    public Ui::OpenWeather
 {
     Q_OBJECT
 public:
@@ -16,10 +18,12 @@ public:
 signals:
 
 public slots:
-    void onNetStatusChange(bool isOnline);
+    void onNetworkStatusChange(bool isOnline);
 
 private:
     QNetworkConfigurationManager *netConf;
+
+    QMovie *movie;
 };
 
 #endif // OPENWEATHER_H

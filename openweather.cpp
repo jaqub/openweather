@@ -5,15 +5,25 @@ OpenWeather::OpenWeather(QWidget *parent) : QWidget(parent)
     setupUi(this);
 
     netConf = new QNetworkConfigurationManager(this);
-    status->setPixmap(QPixmap(":/ui/main/icons/Wifi-1-icon.png"));
+    movie = new QMovie(":/ui/main/icons/loading.gif");
+
+    movie->setScaledSize(QSize(75,75));
+    status->setMovie(movie);
+    movie->start();
 
     if (netConf->isOnline())
-        status->setVisible(true);
+        status->setPixmap(QPixmap(":/ui/main/icons/Wifi-1-icon.png"));
 
-    connect(netConf, &QNetworkConfigurationManager::onlineStateChanged, this, &OpenWeather::onNetStatusChange);
+    connect(netConf, &QNetworkConfigurationManager::onlineStateChanged,
+            this, &OpenWeather::onNetworkStatusChange);
 }
 
-void OpenWeather::onNetStatusChange(bool isOnline)
+void OpenWeather::onNetworkStatusChange(bool isOnline)
 {
-    status->setVisible(isOnline);
+    if (isOnline) {
+        status->setPixmap(QPixmap(":/ui/main/icons/Wifi-1-icon.png"));
+    } else {
+        status->setMovie(movie);
+        movie->start();
+    }
 }
