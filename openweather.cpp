@@ -16,6 +16,8 @@ OpenWeather::OpenWeather(QWidget *parent) : QWidget(parent)
 
     connect(netConf, &QNetworkConfigurationManager::onlineStateChanged,
             this, &OpenWeather::onNetworkStatusChange);
+
+    clock->showTime();
 }
 
 void OpenWeather::onNetworkStatusChange(bool isOnline)
