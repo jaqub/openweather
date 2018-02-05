@@ -1,6 +1,8 @@
 <RCC>
-    <qresource prefix="/ui/main">
-        <file>icons/Wifi-1-icon.png</file>
-        <file>icons/loading.gif</file>
+    <qresource prefix="/">
+        <file>icons/connected.png</file>
+        <file>icons/link.png</file>
+        <file>icons/loading.png</file>
+        <file>icons/refresh.png</file>
     </qresource>
 </RCC>

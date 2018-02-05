@@ -12,6 +12,8 @@ public:
 
 public Q_SLOTS:
     void showTime();
+
+
 };
 
 #endif // QCLOCKWIDGET_H

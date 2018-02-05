@@ -17,13 +17,7 @@ public:
 
 signals:
 
-public slots:
-    void onNetworkStatusChange(bool isOnline);
-
 private:
-    QNetworkConfigurationManager *netConf;
-
-    QMovie *movie;
 };
 
 #endif // OPENWEATHER_H

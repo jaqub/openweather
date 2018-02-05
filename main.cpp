@@ -4,11 +4,17 @@
 
 int main(int argc, char *argv[])
 {
+    int ret;
+
     QApplication a(argc, argv);
 
     OpenWeather *openWeather = new OpenWeather();
 
     openWeather->showFullScreen();
 
-    return a.exec();
+    ret = a.exec();
+
+    delete openWeather;
+
+    return ret;
 }

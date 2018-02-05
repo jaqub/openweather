@@ -1,4 +1,4 @@
-#include "qclockwidget.h"
+#include "QClockWidget.h"
 #include <QtWidgets>
 
 QClockWidget::QClockWidget(QWidget *parent)
