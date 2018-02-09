@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QtNetwork>
 #include <QMovie>
+#include <QList>
 
 #include "ui_openweathermain.h"
 
@@ -13,11 +14,28 @@ class OpenWeather : public QWidget,
 {
     Q_OBJECT
 public:
-    explicit OpenWeather(QWidget *parent = nullptr);
+    explicit OpenWeather(QWidget *aParent = nullptr);
+    ~OpenWeather();
 
-signals:
+    inline void setMain(QString &aName) { main_info->setText(aName); }
+    inline void setDescription(QString aInfo) { description->setText(aInfo); }
+    inline void setInfo1(QString aInfo) { info1->setText(aInfo); }
+    inline void setInfo2(QString aInfo) { info2->setText(aInfo); }
+
+public slots:
+  void onNetworkReplay();
 
 private:
+    void parseWeatherJson(QJsonDocument &aJsonDoc);
+    void parseNetRpl(QNetworkReply *aRpl);
+    int get(QUrl &aUrl);
+    int get(QString aId);
+    int get(QString &aCountry, QString &aCity);
+
+    static const QString mAppId;
+    QUrl *mUlr;
+    QNetworkAccessManager *mNam;
+    QList<QNetworkReply*> mNetRpl;
 };
 
 #endif // OPENWEATHER_H
