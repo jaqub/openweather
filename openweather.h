@@ -17,10 +17,10 @@ public:
     explicit OpenWeather(QWidget *aParent = nullptr);
     ~OpenWeather();
 
-    inline void setMain(QString &aName) { main_info->setText(aName); }
-    inline void setDescription(QString aInfo) { description->setText(aInfo); }
-    inline void setInfo1(QString aInfo) { info1->setText(aInfo); }
-    inline void setInfo2(QString aInfo) { info2->setText(aInfo); }
+    inline void setMain(const QString &aName) { main_info->setText(aName); }
+    inline void setDescription(const QString aInfo) { description->setText(aInfo); }
+    inline void setInfo1(const QString aInfo) { info1->setText(aInfo); }
+    inline void setInfo2(const QString aInfo) { info2->setText(aInfo); }
 
 public slots:
   void onNetworkReplay();

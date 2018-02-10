@@ -142,6 +142,8 @@ void OpenWeather::parseNetRpl(QNetworkReply *aRpl)
 
     if (jsonDoc.isNull()) {
         qWarning() << "Failed to parse network replay:" << jsonErr.errorString();
+        setMain("Json Error");
+        setDescription(jsonErr.errorString());
         return;
     }
 
@@ -163,6 +165,8 @@ void OpenWeather::onNetworkReplay()
 
             if (netRpl->error()) {
                 qWarning() <<  "Request finished with error:" << netRpl->errorString();
+                setMain("Host request error");
+                setDescription(netRpl->errorString());
             } else {
                 qDebug() << "Got response from server";
                 parseNetRpl(netRpl);
