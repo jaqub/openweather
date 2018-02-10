@@ -51,8 +51,7 @@ void OpenWeather::parseWeatherJson(QJsonDocument &aJsonDoc)
         QJsonObject jMainObj = jsonObj["main"].toObject();
 
         if (jMainObj.contains("temp") && jMainObj["temp"].isDouble()) {
-            main.append(QString::number(jMainObj["temp"].toDouble()));
-            main.append("C ");
+            main.append(QString::number(jMainObj["temp"].toDouble()) + QChar(0x2103) + " ");
         }
 
         if (jMainObj.contains("pressure") && jMainObj["pressure"].isDouble()) {
