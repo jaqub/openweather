@@ -86,6 +86,20 @@ void OpenWeather::parseWeatherJson(QJsonDocument &aJsonDoc)
 
             if (jWeatherObj.contains("description") && jWeatherObj["description"].isString())
                 description.append(jWeatherObj["description"].toString());
+
+            if (jWeatherObj.contains("icon") && jWeatherObj["icon"].isString()) {
+                QUrl urlQ;
+                urlQ.setScheme("http");
+                urlQ.setHost("openweathermap.org");
+                urlQ.setPath("/img/w/" + jWeatherObj["icon"].toString() + ".png");
+                QNetworkReply *rpl = mNam->get(QNetworkRequest(urlQ));
+                connect(rpl, &QNetworkReply::finished, [=] () {
+                    QPixmap pixmap;
+                    pixmap.loadFromData(rpl->readAll());
+                    icon->setPixmap(pixmap);
+                    rpl->deleteLater();
+                });
+            }
         }
     }
 
