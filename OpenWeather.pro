@@ -24,14 +24,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-    openweather.cpp \
-    QNetworkStatusWidget.cpp \
-    QClockWidget.cpp
+    openweather.cpp
 
 HEADERS += \
-    openweather.h \
-    QNetworkStatusWidget.h \
-    QClockWidget.h
+    openweather.h
 
 FORMS += \
     openweathermain.ui
