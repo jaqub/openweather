@@ -17,15 +17,17 @@ public:
     explicit OpenWeather(QWidget *aParent = nullptr);
     ~OpenWeather();
 
-    inline void setMain(const QString &aName) { main_info->setText(aName); }
+    inline void setMain(const QString &aName) { main->setText(aName); }
     inline void setDescription(const QString aInfo) { description->setText(aInfo); }
-    inline void setInfo1(const QString aInfo) { info1->setText(aInfo); }
-    inline void setInfo2(const QString aInfo) { info2->setText(aInfo); }
+    inline void setInfo1(const QString aInfo) { }
+    inline void setInfo2(const QString aInfo) { }
+    inline void setClock(const QString &time) { clock->setText(time);}
 
 public slots:
   void onNetworkReplay();
 
 private:
+    void timerEvent(QTimerEvent *event = nullptr);
     void parseWeatherJson(QJsonDocument &aJsonDoc);
     void parseNetRpl(QNetworkReply *aRpl);
     int get(QUrl &aUrl);
@@ -33,6 +35,7 @@ private:
     int get(QString &aCountry, QString &aCity);
 
     static const QString mAppId;
+    int mTimer;
     QUrl *mUlr;
     QNetworkAccessManager *mNam;
     QList<QNetworkReply*> mNetRpl;

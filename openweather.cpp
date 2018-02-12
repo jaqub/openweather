@@ -16,14 +16,23 @@ OpenWeather::OpenWeather(QWidget *aParent) : QWidget(aParent)
     mUlr->setHost("api.openweathermap.org");
     mUlr->setPath("/data/2.5/weather");
 
-    clock->showTime();
-
+    timerEvent();
+    mTimer = startTimer(1000);
     get("3081368");
 }
 
 OpenWeather::~OpenWeather()
 {
     delete mUlr;
+}
+
+void OpenWeather::timerEvent(QTimerEvent *event)
+{
+    QTime currentTime = QTime::currentTime();
+    QString time = currentTime.toString("hh:mm");
+    if (currentTime.second() % 2)
+        time[2] = ' ';
+    setClock(time);
 }
 
 void OpenWeather::parseWeatherJson(QJsonDocument &aJsonDoc)
