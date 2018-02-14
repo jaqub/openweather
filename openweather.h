@@ -22,15 +22,15 @@ public:
     inline void setClock(const QString &time) { clock->setText(time);}
 
 public slots:
-  void onNetworkReplay();
+  void onWeatherRpl();
 
 private:
     void timerEvent();
     void parseWeatherJson(QJsonDocument &aJsonDoc);
-    void parseNetRpl(QNetworkReply *aRpl);
-    int get(QUrl &aUrl);
-    int get(QString aId);
-    int get(QString &aCountry, QString &aCity);
+    void parseWeatherRpl(QNetworkReply *aRpl);
+    int getWeather(QUrl &aUrl);
+    int getWeather(const QString &aId);
+    int getWeather(QString &aCountry, QString &aCity);
 
     static const QString mAppId;
     int mTimer;
