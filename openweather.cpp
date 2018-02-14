@@ -14,11 +14,10 @@ OpenWeather::OpenWeather(QWidget *aParent) : QWidget(aParent)
 
     mUlr->setScheme("http");
     mUlr->setHost("api.openweathermap.org");
-    mUlr->setPath("/data/2.5/weather");
 
     timerEvent();
     mTimer = startTimer(1000);
-    get("3081368");
+    getWeather(QString("3081368"));
 }
 
 OpenWeather::~OpenWeather()
@@ -110,7 +109,7 @@ void OpenWeather::parseWeatherRpl(QNetworkReply *aRpl)
     return;
 }
 
-void OpenWeather::onNetworkReplay()
+void OpenWeather::onWeatherRpl()
 {
     if (mNetRpl.isEmpty())
         return;
@@ -135,8 +134,10 @@ void OpenWeather::onNetworkReplay()
     }
 }
 
-int OpenWeather::get(QString aId)
+int OpenWeather::getWeather(const QString &aId)
 {
+    mUlr->setPath("/data/2.5/weather");
+
     QUrlQuery urlQ;
     urlQ.addQueryItem("appid", mAppId);
     urlQ.addQueryItem("id", aId);
@@ -144,17 +145,17 @@ int OpenWeather::get(QString aId)
 
     mUlr->setQuery(urlQ);
 
-    return get(*mUlr);
+    return getWeather(*mUlr);
 }
 
-int OpenWeather::get(QUrl &aUrl)
+int OpenWeather::getWeather(QUrl &aUrl)
 {
 
     QNetworkReply *netRpl;
     netRpl = mNam->get(QNetworkRequest(aUrl));
     Q_CHECK_PTR(netRpl);
 
-    connect(netRpl, &QNetworkReply::finished, this, &OpenWeather::onNetworkReplay);
+    connect(netRpl, &QNetworkReply::finished, this, &OpenWeather::onWeatherRpl);
 
     mNetRpl.append(netRpl);
     return 0;
