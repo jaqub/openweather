@@ -152,3 +152,21 @@ int OpenWeather::getWeather(QUrl &aUrl)
 
     return 0;
 }
+
+void OpenWeather::onForecastRpl()
+{
+    QNetworkReply *rpl = qobject_cast<QNetworkReply*>(sender());
+
+    delete rpl;
+}
+
+int OpenWeather::getForecast(const QUrl &aUrl)
+{
+    QNetworkReply *netRpl;
+    netRpl = mNam->get(QNetworkRequest(aUrl));
+    Q_CHECK_PTR(netRpl);
+
+    connect(netRpl, &QNetworkReply::finished, this, &OpenWeather::onForecastRpl);
+
+    return 0;
+}

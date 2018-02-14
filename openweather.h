@@ -22,6 +22,7 @@ public:
 
 public slots:
   void onWeatherRpl();
+  void onForecastRpl();
 
 private:
     void timerEvent(QTimerEvent *event = nullptr);
@@ -30,6 +31,7 @@ private:
     int getWeather(QUrl &aUrl);
     int getWeather(const QString &aId);
     int getWeather(QString &aCountry, QString &aCity);
+    int getForecast(const QUrl &aUrl);
 
     static const QString mAppId;
     int mTimer;
