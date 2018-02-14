@@ -25,7 +25,7 @@ public slots:
   void onWeatherRpl();
 
 private:
-    void timerEvent();
+    void timerEvent(QTimerEvent *event = nullptr);
     void parseWeatherJson(QJsonDocument &aJsonDoc);
     void parseWeatherRpl(QNetworkReply *aRpl);
     int getWeather(QUrl &aUrl);

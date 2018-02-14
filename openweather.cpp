@@ -25,7 +25,7 @@ OpenWeather::~OpenWeather()
     delete mUlr;
 }
 
-void OpenWeather::timerEvent()
+void OpenWeather::timerEvent(QTimerEvent *event)
 {
     QTime currentTime = QTime::currentTime();
     QString time = currentTime.toString("hh:mm");
