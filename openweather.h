@@ -5,7 +5,6 @@
 #include <QWidget>
 #include <QtNetwork>
 #include <QMovie>
-#include <QList>
 
 #include "ui_openweathermain.h"
 
@@ -36,7 +35,6 @@ private:
     int mTimer;
     QUrl *mUlr;
     QNetworkAccessManager *mNam;
-    QList<QNetworkReply*> mNetRpl;
 };
 
 #endif // OPENWEATHER_H

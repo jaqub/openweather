@@ -111,26 +111,19 @@ void OpenWeather::parseWeatherRpl(QNetworkReply *aRpl)
 
 void OpenWeather::onWeatherRpl()
 {
-    if (mNetRpl.isEmpty())
-        return;
+    QNetworkReply *netRpl = qobject_cast<QNetworkReply*>(sender());
 
-    for (int i = 0; i < mNetRpl.size(); i++) {
-        QNetworkReply *netRpl = mNetRpl.at(i);
-
-        if (netRpl->isFinished()) {
-            mNetRpl.removeAt(i);
-
-            if (netRpl->error()) {
-                qWarning() <<  "Request finished with error:" << netRpl->errorString();
-                setMain("Host request error");
-                setDescription(netRpl->errorString());
-            } else {
-                qDebug() << "Got response from server";
-                parseWeatherRpl(netRpl);
-            }
-
-            delete netRpl;
+    if (netRpl->isFinished()) {
+        if (netRpl->error()) {
+            qWarning() <<  "Request finished with error:" << netRpl->errorString();
+            setMain("Host request error");
+            setDescription(netRpl->errorString());
+        } else {
+            qDebug() << "Got response from server";
+            parseWeatherRpl(netRpl);
         }
+
+        delete netRpl;
     }
 }
 
@@ -157,6 +150,5 @@ int OpenWeather::getWeather(QUrl &aUrl)
 
     connect(netRpl, &QNetworkReply::finished, this, &OpenWeather::onWeatherRpl);
 
-    mNetRpl.append(netRpl);
     return 0;
 }
