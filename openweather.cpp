@@ -40,8 +40,6 @@ void OpenWeather::parseWeatherJson(QJsonDocument &aJsonDoc)
     QJsonObject jsonObj;
     QString main;
     QString description;
-    QString info1;
-    QString info2;
 
     if (!aJsonDoc.isObject()) {
         qDebug() << "JsonObject didn't found in JsonDoc";
@@ -61,18 +59,6 @@ void OpenWeather::parseWeatherJson(QJsonDocument &aJsonDoc)
 
         if (jMainObj.contains("temp") && jMainObj["temp"].isDouble()) {
             main.append(QString::number(jMainObj["temp"].toDouble()) + QChar(0x2103) + " ");
-        }
-
-        if (jMainObj.contains("pressure") && jMainObj["pressure"].isDouble()) {
-            info1.append("pressure:");
-            info1.append(QString::number(jMainObj["pressure"].toDouble()));
-            info1.append("hpa ");
-        }
-
-        if (jMainObj.contains("humidity") && jMainObj["humidity"].isDouble()) {
-            info1.append("humidity:");
-            info1.append(QString::number(jMainObj["humidity"].toDouble()));
-            info1.append("% ");
         }
     }
 
@@ -103,62 +89,11 @@ void OpenWeather::parseWeatherJson(QJsonDocument &aJsonDoc)
         }
     }
 
-
-    if (jsonObj.contains("clouds") && jsonObj["clouds"].isObject()) {
-        QJsonObject jCloudsObj = jsonObj["clouds"].toObject();
-
-        if (jCloudsObj.contains("all") && jCloudsObj["all"].isDouble()) {
-          info1.append("cloudness:");
-          info1.append(QString::number(jCloudsObj["all"].toDouble()));
-          info1.append("% ");
-        }
-    }
-
-    if (jsonObj.contains("rain") && jsonObj["rain"].isObject()) {
-        QJsonObject jRainObj = jsonObj["rain"].toObject();
-
-        if (jRainObj.contains("3h") && jRainObj["rain"].isDouble()) {
-            info1.append("Rain: ");
-            info1.append(QString::number(jRainObj["3h"].toDouble()));
-        }
-    }
-
-    if (jsonObj.contains("snow") && jsonObj["snow"].isObject()) {
-        QJsonObject jSnowObj = jsonObj["snow"].toObject();
-
-        if (jSnowObj.contains("3h") && jSnowObj["3h"].isDouble()) {
-            info1.append("Snow: ");
-            info1.append(QString::number(jSnowObj["3h"].toDouble()));
-        }
-    }
-
-    if (jsonObj.contains("sys") && jsonObj["sys"].isObject()) {
-        QJsonObject jSysObj = jsonObj["sys"].toObject();
-        QDateTime dateTime;
-        QTime time;
-
-        if (jSysObj.contains("sunrise") && jSysObj["sunrise"].isDouble()) {
-            dateTime.setSecsSinceEpoch(jSysObj["sunrise"].toInt());
-            time = dateTime.time();
-            info2.append("Sunrise: ");
-            info2.append(time.toString("hh:mm:ss"));
-        }
-
-        if (jSysObj.contains("sunset") && jSysObj["sunset"].isDouble()) {
-            dateTime.setSecsSinceEpoch(jSysObj["sunset"].toInt());
-            time = dateTime.time();
-            info2.append(" Sunset: ");
-            info2.append(time.toString("hh:mm:ss"));
-        }
-    }
-
     setMain(main);
     setDescription(description);
-    setInfo1(info1);
-    setInfo2(info2);
 }
 
-void OpenWeather::parseNetRpl(QNetworkReply *aRpl)
+void OpenWeather::parseWeatherRpl(QNetworkReply *aRpl)
 {
     QJsonParseError jsonErr;
     QJsonDocument jsonDoc = QJsonDocument::fromJson(aRpl->readAll(), &jsonErr);
@@ -192,7 +127,7 @@ void OpenWeather::onNetworkReplay()
                 setDescription(netRpl->errorString());
             } else {
                 qDebug() << "Got response from server";
-                parseNetRpl(netRpl);
+                parseWeatherRpl(netRpl);
             }
 
             delete netRpl;

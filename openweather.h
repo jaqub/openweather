@@ -19,8 +19,6 @@ public:
 
     inline void setMain(const QString &aName) { main->setText(aName); }
     inline void setDescription(const QString aInfo) { description->setText(aInfo); }
-    inline void setInfo1(const QString aInfo) { }
-    inline void setInfo2(const QString aInfo) { }
     inline void setClock(const QString &time) { clock->setText(time);}
 
 public slots:
