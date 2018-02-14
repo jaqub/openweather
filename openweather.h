@@ -27,7 +27,7 @@ public slots:
   void onNetworkReplay();
 
 private:
-    void timerEvent(QTimerEvent *event = nullptr);
+    void timerEvent();
     void parseWeatherJson(QJsonDocument &aJsonDoc);
     void parseNetRpl(QNetworkReply *aRpl);
     int get(QUrl &aUrl);
