@@ -153,11 +153,83 @@ int OpenWeather::getWeather(QUrl &aUrl)
     return 0;
 }
 
+void OpenWeather::parseForecastJson(QJsonDocument &aJDoc)
+{
+    QString forecast;
+    QJsonObject jObj;
+
+    if (!aJDoc.isObject()) {
+        qDebug() << "JsonObject didn't found in JsonDoc";
+        return;
+    }
+
+    jObj = aJDoc.object();
+
+    if (jObj.contains("list") && jObj["list"].isArray()) {
+        QJsonArray jListArr = jObj["list"].toArray();
+
+        for (int i = 0; i < jListArr.size(); i++) {
+            QJsonObject jListObj = jListArr.at(i).toObject();
+
+            forecast.clear();
+
+            if (jListObj.contains("dt") && jListObj["dt"].isDouble()) {
+                QDateTime dateTime;
+                dateTime.setSecsSinceEpoch(jListObj["dt"].toInt());
+                forecast.append(dateTime.toString("ddd dd MM yyyy hh:mm "));
+            }
+
+            if (jListObj.contains("main") && jListObj["main"].isObject()) {
+                QJsonObject jMainObj = jListObj["main"].toObject();
+
+                if (jMainObj.contains("temp") && jMainObj["temp"].toDouble()) {
+                    forecast.append(QString::number(jMainObj["temp"].toDouble()) + QChar(0x2103) + " ");
+                }
+            }
+
+            if (jListObj.contains("weather") && jListObj["weather"].isArray()) {
+                QJsonArray jWeatherArr = jListObj["weather"].toArray();
+
+                for (int i = 0; i < jWeatherArr.size(); i++) {
+                   QJsonObject jWeatherObj = jWeatherArr.at(i).toObject();
+
+                   if (jWeatherObj.contains("description") && jWeatherObj["description"].isString()) {
+                       forecast.append(jWeatherObj["description"].toString());
+                   }
+                }
+            }
+
+            qDebug() << forecast;
+        }
+    }
+}
+
+void OpenWeather::parseForecastRpl(QNetworkReply *aRpl)
+{
+    QJsonParseError jsonErr;
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(aRpl->readAll(), &jsonErr);
+
+    if (jsonDoc.isNull()) {
+        qWarning() << "Failed to parse network replay:" << jsonErr.errorString();
+        return;
+    }
+
+    parseForecastJson(jsonDoc);
+
+    return;
+}
+
 void OpenWeather::onForecastRpl()
 {
-    QNetworkReply *rpl = qobject_cast<QNetworkReply*>(sender());
+    QNetworkReply *netRpl = qobject_cast<QNetworkReply*>(sender());
 
-    delete rpl;
+    if (netRpl->error()) {
+        qDebug() << "Request finished with error:" << netRpl->errorString();
+    } else {
+        parseForecastRpl(netRpl);
+    }
+
+    delete netRpl;
 }
 
 int OpenWeather::getForecast(const QUrl &aUrl)
