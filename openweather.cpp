@@ -155,8 +155,8 @@ int OpenWeather::getWeather(QUrl &aUrl)
 
 void OpenWeather::parseForecastJson(QJsonObject &aJObj)
 {
+    QListWidgetItem *listItem = new QListWidgetItem();
     QString weather;
-    QJsonObject jObj;
 
     if (aJObj.contains("dt") && aJObj["dt"].isDouble()) {
         QDateTime dateTime;
@@ -185,6 +185,8 @@ void OpenWeather::parseForecastJson(QJsonObject &aJObj)
     }
 
     qDebug() << weather;
+    listItem->setText(weather);
+    forecastLst->addItem(listItem);
 }
 
 void OpenWeather::parseForecastRpl(QNetworkReply *aRpl)
