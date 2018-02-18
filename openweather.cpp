@@ -84,7 +84,7 @@ void OpenWeather::parseWeatherJson(QJsonDocument &aJsonDoc)
                     QPixmap pixmap;
                     pixmap.loadFromData(rpl->readAll());
                     icon->setPixmap(pixmap);
-                    delete rpl;
+                    rpl->deleteLater();
                 });
             }
         }
