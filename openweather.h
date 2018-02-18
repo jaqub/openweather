@@ -33,7 +33,7 @@ private:
     int getWeather(const QString &aId);
     int getWeather(QString &aCountry, QString &aCity);
 
-    void parseForecastJson(QJsonDocument &aJDoc);
+    void parseForecastJson(QJsonObject &aJObj);
     void parseForecastRpl(QNetworkReply *aRpl);
     int getForecast(const QUrl &aUrl);
 

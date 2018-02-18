@@ -153,60 +153,44 @@ int OpenWeather::getWeather(QUrl &aUrl)
     return 0;
 }
 
-void OpenWeather::parseForecastJson(QJsonDocument &aJDoc)
+void OpenWeather::parseForecastJson(QJsonObject &aJObj)
 {
-    QString forecast;
+    QString weather;
     QJsonObject jObj;
 
-    if (!aJDoc.isObject()) {
-        qDebug() << "JsonObject didn't found in JsonDoc";
-        return;
+    if (aJObj.contains("dt") && aJObj["dt"].isDouble()) {
+        QDateTime dateTime;
+        dateTime.setSecsSinceEpoch(aJObj["dt"].toInt());
+        weather.append(dateTime.toString("ddd dd MM yyyy hh:mm "));
     }
 
-    jObj = aJDoc.object();
+    if (aJObj.contains("main") && aJObj["main"].isObject()) {
+        QJsonObject jMainObj = aJObj["main"].toObject();
 
-    if (jObj.contains("list") && jObj["list"].isArray()) {
-        QJsonArray jListArr = jObj["list"].toArray();
-
-        for (int i = 0; i < jListArr.size(); i++) {
-            QJsonObject jListObj = jListArr.at(i).toObject();
-
-            forecast.clear();
-
-            if (jListObj.contains("dt") && jListObj["dt"].isDouble()) {
-                QDateTime dateTime;
-                dateTime.setSecsSinceEpoch(jListObj["dt"].toInt());
-                forecast.append(dateTime.toString("ddd dd MM yyyy hh:mm "));
-            }
-
-            if (jListObj.contains("main") && jListObj["main"].isObject()) {
-                QJsonObject jMainObj = jListObj["main"].toObject();
-
-                if (jMainObj.contains("temp") && jMainObj["temp"].toDouble()) {
-                    forecast.append(QString::number(jMainObj["temp"].toDouble()) + QChar(0x2103) + " ");
-                }
-            }
-
-            if (jListObj.contains("weather") && jListObj["weather"].isArray()) {
-                QJsonArray jWeatherArr = jListObj["weather"].toArray();
-
-                for (int i = 0; i < jWeatherArr.size(); i++) {
-                   QJsonObject jWeatherObj = jWeatherArr.at(i).toObject();
-
-                   if (jWeatherObj.contains("description") && jWeatherObj["description"].isString()) {
-                       forecast.append(jWeatherObj["description"].toString());
-                   }
-                }
-            }
-
-            qDebug() << forecast;
+        if (jMainObj.contains("temp") && jMainObj["temp"].toDouble()) {
+            weather.append(QString::number(jMainObj["temp"].toDouble()) + QChar(0x2103) + " ");
         }
     }
+
+    if (aJObj.contains("weather") && aJObj["weather"].isArray()) {
+        QJsonArray jWeatherArr = aJObj["weather"].toArray();
+
+        for (int i = 0; i < jWeatherArr.size(); i++) {
+           QJsonObject jWeatherObj = jWeatherArr.at(i).toObject();
+
+           if (jWeatherObj.contains("description") && jWeatherObj["description"].isString()) {
+               weather.append(jWeatherObj["description"].toString());
+           }
+        }
+    }
+
+    qDebug() << weather;
 }
 
 void OpenWeather::parseForecastRpl(QNetworkReply *aRpl)
 {
     QJsonParseError jsonErr;
+    QJsonObject jObj;
     QJsonDocument jsonDoc = QJsonDocument::fromJson(aRpl->readAll(), &jsonErr);
 
     if (jsonDoc.isNull()) {
@@ -214,7 +198,19 @@ void OpenWeather::parseForecastRpl(QNetworkReply *aRpl)
         return;
     }
 
-    parseForecastJson(jsonDoc);
+    jObj = jsonDoc.object();
+
+    if (jObj.contains("list") && jObj["list"].isArray()) {
+        QJsonArray jListArr = jObj["list"].toArray();
+
+        for (int i = 0; i < jListArr.size(); i++) {
+            QJsonObject jListObj = jListArr.at(i).toObject();
+
+            parseForecastJson(jListObj);
+         }
+    } else {
+        parseForecastJson(jObj);
+    }
 
     return;
 }
