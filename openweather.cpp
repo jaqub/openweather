@@ -186,7 +186,7 @@ void OpenWeather::parseForecastJson(QJsonObject &aJObj)
     qDebug() << weather;
     QListWidgetItem *listItem = new QListWidgetItem();
     listItem->setText(weather);
-    forecastLst->addItem(listItem);
+    forecastList->addItem(listItem);
 }
 
 void OpenWeather::parseForecastRpl(QNetworkReply *aRpl)

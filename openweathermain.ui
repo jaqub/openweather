@@ -182,7 +182,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QListWidget" name="forecastLst"/>
+    <widget class="QListWidget" name="forecastList">
    </item>
   </layout>
  </widget>
