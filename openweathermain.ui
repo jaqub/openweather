@@ -183,6 +183,19 @@
    </item>
    <item>
     <widget class="QListWidget" name="forecastList">
+     <property name="font">
+      <font>
+       <family>Ubuntu Mono</family>
+       <pointsize>18</pointsize>
+      </font>
+     </property>
+     <property name="flow">
+      <enum>QListView::TopToBottom</enum>
+     </property>
+     <property name="spacing">
+      <number>5</number>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
