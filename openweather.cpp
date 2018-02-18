@@ -155,13 +155,15 @@ int OpenWeather::getWeather(QUrl &aUrl)
 
 void OpenWeather::parseForecastJson(QJsonObject &aJObj)
 {
-    QListWidgetItem *listItem = new QListWidgetItem();
     QString weather;
 
     if (aJObj.contains("dt") && aJObj["dt"].isDouble()) {
         QDateTime dateTime;
         dateTime.setSecsSinceEpoch(aJObj["dt"].toInt());
-        weather.append(dateTime.toString("ddd dd MM yyyy hh:mm "));
+        if (dateTime.time().hour() != 13)
+            return;
+
+        weather.append(dateTime.toString("ddd\t").toUpper());
     }
 
     if (aJObj.contains("main") && aJObj["main"].isObject()) {
@@ -185,6 +187,7 @@ void OpenWeather::parseForecastJson(QJsonObject &aJObj)
     }
 
     qDebug() << weather;
+    QListWidgetItem *listItem = new QListWidgetItem();
     listItem->setText(weather);
     forecastLst->addItem(listItem);
 }
