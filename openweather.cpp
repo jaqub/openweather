@@ -57,7 +57,7 @@ void OpenWeather::parseWeatherJson(QJsonDocument &aJsonDoc)
         QJsonObject jMainObj = jsonObj["main"].toObject();
 
         if (jMainObj.contains("temp") && jMainObj["temp"].isDouble()) {
-            main.append(QString::number(jMainObj["temp"].toDouble()) + QChar(0x2103) + " ");
+            main.append(QString::number(jMainObj["temp"].toDouble(), 'f', 1) + QChar(0x2103) + "\t");
         }
     }
 
@@ -170,7 +170,7 @@ void OpenWeather::parseForecastJson(QJsonObject &aJObj)
         QJsonObject jMainObj = aJObj["main"].toObject();
 
         if (jMainObj.contains("temp") && jMainObj["temp"].toDouble()) {
-            weather.append(QString::number(jMainObj["temp"].toDouble()) + QChar(0x2103) + " ");
+            weather.append(QString::number(jMainObj["temp"].toDouble(), 'f', 1) + QChar(0x2103) + "\t");
         }
     }
 
