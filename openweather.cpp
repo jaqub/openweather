@@ -66,9 +66,6 @@ void OpenWeather::parseWeatherJson(QJsonDocument &aJsonDoc)
         for (int i = 0; i < jWeatherArr.size(); i++) {
             QJsonObject jWeatherObj = jWeatherArr.at(i).toObject();
 
-            if (jWeatherObj.contains("main") && jWeatherObj["main"].isString())
-                main.append(jWeatherObj["main"].toString());
-
             if (jWeatherObj.contains("description") && jWeatherObj["description"].isString())
                 description.append(jWeatherObj["description"].toString());
 
