@@ -123,7 +123,7 @@ void OpenWeather::onWeatherRpl()
             parseWeatherRpl(netRpl);
         }
 
-        delete netRpl;
+        netRpl->deleteLater();
     }
 }
 
@@ -227,7 +227,7 @@ void OpenWeather::onForecastRpl()
         parseForecastRpl(netRpl);
     }
 
-    delete netRpl;
+    netRpl->deleteLater();
 }
 
 int OpenWeather::getForecast(const QUrl &aUrl)
