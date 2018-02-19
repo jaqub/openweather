@@ -24,10 +24,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-    openweather.cpp
+    openweather.cpp \
+    weatheritemdelegate.cpp
 
 HEADERS += \
-    openweather.h
+    openweather.h \
+    weatheritemdelegate.h
 
 FORMS += \
     openweathermain.ui

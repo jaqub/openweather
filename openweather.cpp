@@ -1,11 +1,15 @@
 #include "openweather.h"
 #include <QDateTime>
 
+#include "weatheritemdelegate.h"
+
 const QString OpenWeather::mAppId = "";
 
 OpenWeather::OpenWeather(QWidget *aParent) : QWidget(aParent)
 {
     setupUi(this);
+    forecastList->setItemDelegate(new WeatherItemDelegate(forecastList));
+
     mUlr = new QUrl();
     Q_CHECK_PTR(mUlr);
 
