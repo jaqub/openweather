@@ -1,5 +1,6 @@
 #include "openweather.h"
 #include <QDateTime>
+#include <QLocale>
 
 #include "weatheritemdelegate.h"
 
