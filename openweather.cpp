@@ -132,7 +132,7 @@ int OpenWeather::getWeather(const QString &aId)
     urlQ.addQueryItem("appid", mAppId);
     urlQ.addQueryItem("id", aId);
     urlQ.addQueryItem("units", "metric");
-    urlQ.addQueryItem("lang", "pl");
+    urlQ.addQueryItem("lang", QLocale().bcp47Name());
 
     mUlr->setQuery(urlQ);
 
