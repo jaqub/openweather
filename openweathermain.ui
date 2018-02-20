@@ -193,7 +193,7 @@
       <enum>QListView::TopToBottom</enum>
      </property>
      <property name="spacing">
-      <number>5</number>
+      <number>0</number>
      </property>
     </widget>
    </item>
