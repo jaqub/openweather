@@ -8,10 +8,12 @@
 
 #include "ui_openweathermain.h"
 
+class WeatherListItem;
+
 class OpenWeather : public QWidget,
                     public Ui::OpenWeather
 {
-    Q_OBJECT
+
 public:
     explicit OpenWeather(QWidget *aParent = nullptr);
     ~OpenWeather();
@@ -33,7 +35,7 @@ private:
     int getWeather(const QString &aId);
     int getWeather(QString &aCountry, QString &aCity);
 
-    void parseForecastJson(QJsonObject &aJObj);
+    WeatherListItem *parseForecastJson(QJsonObject &aJObj);
     void parseForecastRpl(QNetworkReply *aRpl);
     int getForecast(const QUrl &aUrl);
 

@@ -1,8 +1,11 @@
 #include "openweather.h"
 #include <QDateTime>
 #include <QLocale>
+#include <QListWidgetItem>
+#include <QListWidget>
 
 #include "weatheritemdelegate.h"
+#include "weatherlistitem.h"
 
 const QString OpenWeather::mAppId = "";
 
@@ -75,11 +78,8 @@ void OpenWeather::parseWeatherJson(QJsonDocument &aJsonDoc)
                 description.append(jWeatherObj["description"].toString());
 
             if (jWeatherObj.contains("icon") && jWeatherObj["icon"].isString()) {
-                QUrl urlQ;
-                urlQ.setScheme("http");
-                urlQ.setHost("openweathermap.org");
-                urlQ.setPath("/img/w/" + jWeatherObj["icon"].toString() + ".png");
-                QNetworkReply *rpl = mNam->get(QNetworkRequest(urlQ));
+                QString url = QString("http://openweathermap.org/img/w/%1.png").arg(jWeatherObj["icon"].toString());
+                QNetworkReply *rpl = mNam->get(QNetworkRequest(QUrl(url)));
                 connect(rpl, &QNetworkReply::finished, [=] () {
                     QPixmap pixmap;
                     pixmap.loadFromData(rpl->readAll());
@@ -156,15 +156,16 @@ int OpenWeather::getWeather(QUrl &aUrl)
     return 0;
 }
 
-void OpenWeather::parseForecastJson(QJsonObject &aJObj)
+WeatherListItem *OpenWeather::parseForecastJson(QJsonObject &aJObj)
 {
+    WeatherListItem *listItem = new WeatherListItem();
     QString weather;
 
     if (aJObj.contains("dt") && aJObj["dt"].isDouble()) {
         QDateTime dateTime;
         dateTime.setSecsSinceEpoch(aJObj["dt"].toInt());
         if (dateTime.time().hour() != 13)
-            return;
+            return nullptr;
 
         weather.append(dateTime.toString("ddd\t").toUpper());
     }
@@ -186,13 +187,18 @@ void OpenWeather::parseForecastJson(QJsonObject &aJObj)
            if (jWeatherObj.contains("description") && jWeatherObj["description"].isString()) {
                weather.append(jWeatherObj["description"].toString());
            }
+
+           if (jWeatherObj.contains("icon") && jWeatherObj["icon"].isString()) {
+               QString url = QString("http://openweathermap.org/img/w/%1.png").arg(jWeatherObj["icon"].toString());
+               QNetworkReply *rpl = mNam->get(QNetworkRequest(QUrl(url)));
+               connect(rpl, &QNetworkReply::finished, listItem, &WeatherListItem::onIconDownload);
+           }
         }
     }
 
     qDebug() << weather;
-    QListWidgetItem *listItem = new QListWidgetItem();
     listItem->setText(weather);
-    forecastList->addItem(listItem);
+    return listItem;
 }
 
 void OpenWeather::parseForecastRpl(QNetworkReply *aRpl)
@@ -214,7 +220,9 @@ void OpenWeather::parseForecastRpl(QNetworkReply *aRpl)
         for (int i = 0; i < jListArr.size(); i++) {
             QJsonObject jListObj = jListArr.at(i).toObject();
 
-            parseForecastJson(jListObj);
+            WeatherListItem *item = parseForecastJson(jListObj);
+            if (item)
+              forecastList->addItem(item);
          }
     } else {
         parseForecastJson(jObj);
