@@ -164,9 +164,6 @@ WeatherListItem *OpenWeather::parseForecastJson(QJsonObject &aJObj)
     if (aJObj.contains("dt") && aJObj["dt"].isDouble()) {
         QDateTime dateTime;
         dateTime.setSecsSinceEpoch(aJObj["dt"].toInt());
-        if (dateTime.time().hour() != 13)
-            return nullptr;
-
         weather.append(dateTime.toString("ddd\t").toUpper());
     }
 
