@@ -164,14 +164,14 @@ WeatherListItem *OpenWeather::parseForecastJson(QJsonObject &aJObj)
     if (aJObj.contains("dt") && aJObj["dt"].isDouble()) {
         QDateTime dateTime;
         dateTime.setSecsSinceEpoch(aJObj["dt"].toInt());
-        weather.append(dateTime.toString("ddd\t").toUpper());
+        weather.append(dateTime.toString("ddd hh ").toUpper());
     }
 
     if (aJObj.contains("main") && aJObj["main"].isObject()) {
         QJsonObject jMainObj = aJObj["main"].toObject();
 
         if (jMainObj.contains("temp") && jMainObj["temp"].toDouble()) {
-            weather.append(QString::number(jMainObj["temp"].toDouble(), 'f', 1) + QChar(0x2103) + "\t");
+            weather.append(QString::number(jMainObj["temp"].toDouble(), 'f', 1) + QChar(0x2103) + " ");
         }
     }
 
