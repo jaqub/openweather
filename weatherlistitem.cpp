@@ -25,7 +25,5 @@ void WeatherListItem::onIconDownload()
     pixmap.loadFromData(rpl->readAll());
     setIcon(QIcon(pixmap));
 
-    qDebug() << "got Icon";
-
     rpl->deleteLater();
 }

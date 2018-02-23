@@ -193,7 +193,6 @@ WeatherListItem *OpenWeather::parseForecastJson(QJsonObject &aJObj)
         }
     }
 
-    qDebug() << weather;
     listItem->setText(weather);
     return listItem;
 }
