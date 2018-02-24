@@ -35,6 +35,8 @@ OpenWeather::~OpenWeather()
 
 void OpenWeather::timerEvent(QTimerEvent *event)
 {
+    Q_UNUSED(event);
+
     QTime currentTime = QTime::currentTime();
     QString time = currentTime.toString("hh:mm");
     if (currentTime.second() % 2)
