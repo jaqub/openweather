@@ -29,6 +29,9 @@ private slots:
 private:
     void timerEvent(QTimerEvent *event = nullptr);
 
+    void updateTime(void);
+    void updateWeather(void);
+
     void parseWeatherJson(QJsonDocument &aJsonDoc);
     void parseWeatherRpl(QNetworkReply *aRpl);
     int getWeather(QUrl &aUrl);
@@ -40,7 +43,8 @@ private:
     int getForecast(const QUrl &aUrl);
 
     static const QString mAppId;
-    int mTimer;
+    int mClockTimer;
+    int mWeatherTimer;
     QUrl *mUlr;
     QNetworkAccessManager *mNam;
 };

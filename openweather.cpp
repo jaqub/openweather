@@ -23,8 +23,11 @@ OpenWeather::OpenWeather(QWidget *aParent) : QWidget(aParent)
     mUlr->setScheme("http");
     mUlr->setHost("api.openweathermap.org");
 
-    timerEvent();
-    mTimer = startTimer(1000);
+    updateTime();
+
+    mClockTimer = startTimer(1000);
+    mWeatherTimer = startTimer(5000);
+
     getWeather(QString("3081368"));
 }
 
@@ -33,15 +36,27 @@ OpenWeather::~OpenWeather()
     delete mUlr;
 }
 
-void OpenWeather::timerEvent(QTimerEvent *event)
+void OpenWeather::updateTime(void)
 {
-    Q_UNUSED(event);
-
     QTime currentTime = QTime::currentTime();
     QString time = currentTime.toString("hh:mm");
     if (currentTime.second() % 2)
         time[2] = ' ';
     setClock(time);
+}
+
+void OpenWeather::updateWeather(void)
+{
+    getWeather(QString("3081368"));
+}
+
+void OpenWeather::timerEvent(QTimerEvent *event)
+{
+    int timerId = event->timerId();
+    if (timerId == mClockTimer)
+        updateTime();
+    else if (timerId == mWeatherTimer)
+        updateWeather();
 }
 
 void OpenWeather::parseWeatherJson(QJsonDocument &aJsonDoc)
@@ -214,6 +229,8 @@ void OpenWeather::parseForecastRpl(QNetworkReply *aRpl)
 
     if (jObj.contains("list") && jObj["list"].isArray()) {
         QJsonArray jListArr = jObj["list"].toArray();
+
+        forecastList->clear();
 
         for (int i = 0; i < jListArr.size(); i++) {
             QJsonObject jListObj = jListArr.at(i).toObject();
