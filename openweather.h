@@ -43,6 +43,7 @@ private:
     int getForecast(const QUrl &aUrl);
 
     const QString mAppId;
+    QString mLang;
     int mClockTimer;
     int mWeatherTimer;
     QUrl *mUlr;

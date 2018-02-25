@@ -14,22 +14,23 @@ OpenWeather::OpenWeather(QWidget *aParent, QString aAppId) : QWidget(aParent),
     setupUi(this);
     forecastList->setItemDelegate(new WeatherItemDelegate(forecastList));
 
-    mUlr = new QUrl();
-    Q_CHECK_PTR(mUlr);
-
     mNam = new QNetworkAccessManager(this);
     Q_CHECK_PTR(mNam);
+
+    mUlr = new QUrl();
+    Q_CHECK_PTR(mUlr);
 
     mUlr->setScheme("http");
     mUlr->setHost("api.openweathermap.org");
 
+    mLang = locale().bcp47Name();
     updateTime();
 
     mClockTimer = startTimer(1000);
     mWeatherTimer = startTimer(5000);
 
     getWeather(QString("3081368"));
-    getForecast(QUrl("http://api.openweathermap.org/data/2.5/forecast?units=metric&id=3081368&appid=" + mAppId + "&lang=pl"));
+    getForecast(QUrl("http://api.openweathermap.org/data/2.5/forecast?units=metric&id=3081368&appid=" + mAppId + "&lang=" + mLang));
 }
 
 OpenWeather::~OpenWeather()
@@ -49,7 +50,7 @@ void OpenWeather::updateTime(void)
 void OpenWeather::updateWeather(void)
 {
     getWeather(QString("3081368"));
-    getForecast(QUrl("http://api.openweathermap.org/data/2.5/forecast?units=metric&id=3081368&appid=" + mAppId + "&lang=pl"));
+    getForecast(QUrl("http://api.openweathermap.org/data/2.5/forecast?units=metric&id=3081368&appid=" + mAppId + "&lang=" + mLang));
 }
 
 void OpenWeather::timerEvent(QTimerEvent *event)
@@ -156,7 +157,7 @@ int OpenWeather::getWeather(const QString &aId)
     urlQ.addQueryItem("appid", mAppId);
     urlQ.addQueryItem("id", aId);
     urlQ.addQueryItem("units", "metric");
-    urlQ.addQueryItem("lang", QLocale().bcp47Name());
+    urlQ.addQueryItem("lang", mLang);
 
     mUlr->setQuery(urlQ);
 
