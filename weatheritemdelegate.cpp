@@ -35,7 +35,7 @@ void WeatherItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &o
 QSize WeatherItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QSize size = QStyledItemDelegate::sizeHint(option, index);
-    size.setHeight(size.height() + 20);
+    size.setHeight(50);
 
     return size;
 }
