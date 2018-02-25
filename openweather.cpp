@@ -27,7 +27,7 @@ OpenWeather::OpenWeather(QWidget *aParent, QString aAppId) : QWidget(aParent),
     updateTime();
 
     mClockTimer = startTimer(1000);
-    mWeatherTimer = startTimer(5000);
+    mWeatherTimer = startTimer(300000);
 
     getWeather(QString("3081368"));
     getForecast(QUrl("http://api.openweathermap.org/data/2.5/forecast?units=metric&id=3081368&appid=" + mAppId + "&lang=" + mLang));
