@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
 
-    OpenWeather *openWeather = new OpenWeather();
+    OpenWeather *openWeather = new OpenWeather(nullptr, argv[1]);
 
     openWeather->showFullScreen();
 

@@ -3,13 +3,13 @@
 #include <QLocale>
 #include <QListWidgetItem>
 #include <QListWidget>
+#include <QEvent>
 
 #include "weatheritemdelegate.h"
 #include "weatherlistitem.h"
 
-const QString OpenWeather::mAppId = "";
-
-OpenWeather::OpenWeather(QWidget *aParent) : QWidget(aParent)
+OpenWeather::OpenWeather(QWidget *aParent, QString aAppId) : QWidget(aParent),
+    mAppId(aAppId)
 {
     setupUi(this);
     forecastList->setItemDelegate(new WeatherItemDelegate(forecastList));
@@ -29,6 +29,7 @@ OpenWeather::OpenWeather(QWidget *aParent) : QWidget(aParent)
     mWeatherTimer = startTimer(5000);
 
     getWeather(QString("3081368"));
+    getForecast(QUrl("http://api.openweathermap.org/data/2.5/forecast?units=metric&id=3081368&appid=" + mAppId + "&lang=pl"));
 }
 
 OpenWeather::~OpenWeather()
@@ -48,6 +49,7 @@ void OpenWeather::updateTime(void)
 void OpenWeather::updateWeather(void)
 {
     getWeather(QString("3081368"));
+    getForecast(QUrl("http://api.openweathermap.org/data/2.5/forecast?units=metric&id=3081368&appid=" + mAppId + "&lang=pl"));
 }
 
 void OpenWeather::timerEvent(QTimerEvent *event)
