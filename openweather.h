@@ -15,7 +15,7 @@ class OpenWeather : public QWidget,
 {
 
 public:
-    explicit OpenWeather(QWidget *aParent = nullptr, QString aAppId = "");
+    explicit OpenWeather(QString aAppId = "", QString aId = "", QWidget *aParent = nullptr);
     ~OpenWeather();
 
     inline void setMain(const QString &aName) { main->setText(aName); }
@@ -43,6 +43,7 @@ private:
     int getForecast(const QUrl &aUrl);
 
     const QString mAppId;
+    const QString id;
     QString mLang;
     int mClockTimer;
     int mWeatherTimer;

@@ -8,8 +8,8 @@
 #include "weatheritemdelegate.h"
 #include "weatherlistitem.h"
 
-OpenWeather::OpenWeather(QWidget *aParent, QString aAppId) : QWidget(aParent),
-    mAppId(aAppId)
+OpenWeather::OpenWeather(QString aAppId, QString aId, QWidget *aParent) : QWidget(aParent),
+    mAppId(aAppId), id(aId)
 {
     setupUi(this);
     forecastList->setItemDelegate(new WeatherItemDelegate(forecastList));
@@ -29,7 +29,7 @@ OpenWeather::OpenWeather(QWidget *aParent, QString aAppId) : QWidget(aParent),
     mClockTimer = startTimer(1000);
     mWeatherTimer = startTimer(300000);
 
-    getWeather(QString("3081368"));
+    getWeather(id);
     getForecast(QUrl("http://api.openweathermap.org/data/2.5/forecast?units=metric&id=3081368&appid=" + mAppId + "&lang=" + mLang));
 }
 
@@ -49,7 +49,7 @@ void OpenWeather::updateTime(void)
 
 void OpenWeather::updateWeather(void)
 {
-    getWeather(QString("3081368"));
+    getWeather(id);
     getForecast(QUrl("http://api.openweathermap.org/data/2.5/forecast?units=metric&id=3081368&appid=" + mAppId + "&lang=" + mLang));
 }
 
