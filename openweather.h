@@ -40,14 +40,15 @@ private:
 
     WeatherListItem *parseForecastJson(QJsonObject &aJObj);
     void parseForecastRpl(QNetworkReply *aRpl);
+    int getForecast(const QString &aId);
     int getForecast(const QUrl &aUrl);
 
     const QString mAppId;
-    const QString id;
+    const QString mId;
     QString mLang;
     int mClockTimer;
     int mWeatherTimer;
-    QUrl *mUlr;
+    QUrl *mUrl;
     QNetworkAccessManager *mNam;
 };
 
