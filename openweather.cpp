@@ -31,6 +31,8 @@ OpenWeather::OpenWeather(QWidget *aParent, QString aAppId) : QWidget(aParent),
 
     getWeather(QString("3081368"));
     getForecast(QUrl("http://api.openweathermap.org/data/2.5/forecast?units=metric&id=3081368&appid=" + mAppId + "&lang=" + mLang));
+
+    mUdev = UdevSingleton::get();
 }
 
 OpenWeather::~OpenWeather()

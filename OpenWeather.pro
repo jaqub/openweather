@@ -26,15 +26,20 @@ SOURCES += \
         main.cpp \
     openweather.cpp \
     weatheritemdelegate.cpp \
-    weatherlistitem.cpp
+    weatherlistitem.cpp \
+    udev.cpp
 
 HEADERS += \
     openweather.h \
     weatheritemdelegate.h \
-    weatherlistitem.h
+    weatherlistitem.h \
+    udev.h \
+    singleton.h
 
 FORMS += \
     openweathermain.ui
+
+LIBS += -ludev
 
 target.path = /home/pi
 INSTALLS += target

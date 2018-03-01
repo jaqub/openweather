@@ -7,6 +7,7 @@
 #include <QMovie>
 
 #include "ui_openweathermain.h"
+#include "udev.h"
 
 class WeatherListItem;
 
@@ -48,6 +49,7 @@ private:
     int mWeatherTimer;
     QUrl *mUlr;
     QNetworkAccessManager *mNam;
+    Udev *mUdev;
 };
 
 #endif // OPENWEATHER_H
