@@ -36,7 +36,6 @@ private:
     void parseWeatherRpl(QNetworkReply *aRpl);
     int getWeather(QUrl &aUrl);
     int getWeather(const QString &aId);
-    int getWeather(QString &aCountry, QString &aCity);
 
     WeatherListItem *parseForecastJson(QJsonObject &aJObj);
     void parseForecastRpl(QNetworkReply *aRpl);

@@ -245,7 +245,7 @@ void OpenWeather::parseForecastRpl(QNetworkReply *aRpl)
             WeatherListItem *item = parseForecastJson(jListObj);
             if (item)
               forecastList->addItem(item);
-         }
+        }
     } else {
         parseForecastJson(jObj);
     }
