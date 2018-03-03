@@ -13,6 +13,7 @@ OpenWeather::OpenWeather(QString aAppId, QString aId, QWidget *aParent) : QWidge
 {
     setupUi(this);
     forecastList->setItemDelegate(new WeatherItemDelegate(forecastList));
+    forecastList->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     mNam = new QNetworkAccessManager(this);
     Q_CHECK_PTR(mNam);
