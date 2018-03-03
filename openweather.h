@@ -50,6 +50,7 @@ private:
     QUrl *mUlr;
     QNetworkAccessManager *mNam;
     Udev *mUdev;
+    QVector<udev_device*> mDevices;
 };
 
 #endif // OPENWEATHER_H
