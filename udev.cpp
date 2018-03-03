@@ -8,9 +8,9 @@ Udev::Udev()
     Q_CHECK_PTR(mUdev);
 }
 
-QVector<udev_device *> Udev::getDevice(const char *aSubsystem)
+QVector<Device *> Udev::getDevice(const char *aSubsystem)
 {
-    QVector<udev_device *> devices;
+    QVector<Device *> devices;
     udev_enumerate *enumerate = udev_enumerate_new(mUdev);
     Q_CHECK_PTR(enumerate);
 
@@ -41,18 +41,8 @@ QVector<udev_device *> Udev::getDevice(const char *aSubsystem)
         const char *devName = udev_list_entry_get_name(item);
         qDebug() << "Device found:" << devName;
         udev_device *device = udev_device_new_from_syspath(mUdev, devName);
-        devices.append(device);
+        devices.append(new Device(device));
     }
     udev_enumerate_unref(enumerate);
     return devices;
-}
-
-void Udev::releaseDev(udev_device *aDevice)
-{
-   Q_CHECK_PTR(aDevice);
-
-   if (!aDevice)
-       return;
-
-   udev_device_unref(aDevice);
 }

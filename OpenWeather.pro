@@ -28,7 +28,8 @@ SOURCES += \
     weatheritemdelegate.cpp \
     weatherlistitem.cpp \
     udev.cpp \
-    logger.cpp
+    logger.cpp \
+    device.cpp
 
 HEADERS += \
     openweather.h \
@@ -36,7 +37,8 @@ HEADERS += \
     weatherlistitem.h \
     udev.h \
     singleton.h \
-    logger.h
+    logger.h \
+    device.h
 
 FORMS += \
     openweathermain.ui
