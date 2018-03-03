@@ -12,7 +12,7 @@ public:
 
     QStringList getAttrNameList();
 
-    std::string getAttrValue(char *aAttrName);
+    QByteArray getAttrValue(char *aAttrName);
 
     int setAttrValue(char *aAttrName, char *aValue);
 

@@ -31,7 +31,9 @@ OpenWeather::OpenWeather(QString aAppId, QString aId, QWidget *aParent) : QWidge
     mWeatherTimer = startTimer(300000);
 
     mDevices = (UdevSingleton::get())->getDevice("backlight");
-    qDebug() << "Got" << mDevices.size() << "devices";
+    qDebug() << "Got: " << mDevices.size() << "devices";
+    for (auto it = mDevices.begin(); it < mDevices.end(); it++)
+        qDebug() << (*it)->getAttrValue("brightness");
 
     getWeather(mId);
     getForecast(mId);
