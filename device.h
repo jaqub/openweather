@@ -19,6 +19,7 @@ public:
 private:
 
     udev_device *mDevice;
+    QByteArray mName;
 };
 
 #endif // DEVICE_H
