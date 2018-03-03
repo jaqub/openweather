@@ -39,11 +39,10 @@ OpenWeather::OpenWeather(QString aAppId, QString aId, QWidget *aParent) : QWidge
 
 OpenWeather::~OpenWeather()
 {
-    Udev *udev = UdevSingleton::get();
     // release devices if any
     if (!mDevices.isEmpty()) {
-        for (QVector<udev_device *>::iterator it = mDevices.begin(); it < mDevices.end(); it++) {
-            udev->releaseDev(*it);
+        for (QVector<Device *>::iterator it = mDevices.begin(); it < mDevices.end(); it++) {
+            delete *it;
         }
     }
 

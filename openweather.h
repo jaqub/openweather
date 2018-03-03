@@ -8,6 +8,7 @@
 
 #include "ui_openweathermain.h"
 #include "udev.h"
+#include "device.h"
 
 class WeatherListItem;
 
@@ -50,7 +51,7 @@ private:
     int mWeatherTimer;
     QUrl *mUrl;
     QNetworkAccessManager *mNam;
-    QVector<udev_device*> mDevices;
+    QVector<Device *> mDevices;
 };
 
 #endif // OPENWEATHER_H

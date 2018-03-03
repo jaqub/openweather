@@ -3,15 +3,15 @@
 #include <QVector>
 #include <libudev.h>
 #include "singleton.h"
+#include "device.h"
 
 class Udev
 {
 public:
     Udev();
 
-    QVector<udev_device*> getDevice(const char* aSubsystem);
+    QVector<Device *> getDevice(const char* aSubsystem);
 
-    void releaseDev(udev_device *aDevice);
 private:
     udev *mUdev;
 };

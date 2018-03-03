@@ -27,14 +27,16 @@ SOURCES += \
     openweather.cpp \
     weatheritemdelegate.cpp \
     weatherlistitem.cpp \
-    udev.cpp
+    udev.cpp \
+    device.cpp
 
 HEADERS += \
     openweather.h \
     weatheritemdelegate.h \
     weatherlistitem.h \
     udev.h \
-    singleton.h
+    singleton.h \
+    device.h
 
 FORMS += \
     openweathermain.ui
