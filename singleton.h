@@ -9,17 +9,8 @@ public:
     template <typename... Params>
     static T* get(Params... aParams)
     {
-        if(!mInstance)
-        {
-            mInstance = new T(std::forward<Params>(aParams)...);
-        }
-        return mInstance;
-    }
-
-    static void del()
-    {
-        delete mInstance;
-        mInstance = nullptr;
+        static T mInstance(std::forward<Params>(aParams)...);
+        return &mInstance;
     }
 
 protected:
@@ -31,10 +22,6 @@ private:
     Singleton(Singleton const &);
 
     Singleton &operator=(Singleton const &);
-
-    static T* mInstance;
 };
-
-template <typename T> T* Singleton<T>::mInstance = nullptr;
 
 #endif // SINGLETON_H
