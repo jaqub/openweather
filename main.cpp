@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     QString appId = parser.value(appIdOpt);
     QString id = parser.value(idOpt);
 
-    OpenWeather *openWeather = new OpenWeather(nullptr, appId);
+    OpenWeather *openWeather = new OpenWeather(appId, id);
     openWeather->showFullScreen();
     int ret = a.exec();
 

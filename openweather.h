@@ -16,7 +16,7 @@ class OpenWeather : public QWidget,
 {
 
 public:
-    explicit OpenWeather(QWidget *aParent = nullptr, QString aAppId = "");
+    explicit OpenWeather(QString aAppId = "", QString aId = "", QWidget *aParent = nullptr);
     ~OpenWeather();
 
     inline void setMain(const QString &aName) { main->setText(aName); }
@@ -37,17 +37,18 @@ private:
     void parseWeatherRpl(QNetworkReply *aRpl);
     int getWeather(QUrl &aUrl);
     int getWeather(const QString &aId);
-    int getWeather(QString &aCountry, QString &aCity);
 
     WeatherListItem *parseForecastJson(QJsonObject &aJObj);
     void parseForecastRpl(QNetworkReply *aRpl);
+    int getForecast(const QString &aId);
     int getForecast(const QUrl &aUrl);
 
     const QString mAppId;
+    const QString mId;
     QString mLang;
     int mClockTimer;
     int mWeatherTimer;
-    QUrl *mUlr;
+    QUrl *mUrl;
     QNetworkAccessManager *mNam;
     QVector<udev_device*> mDevices;
 };

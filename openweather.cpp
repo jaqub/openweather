@@ -8,20 +8,21 @@
 #include "weatheritemdelegate.h"
 #include "weatherlistitem.h"
 
-OpenWeather::OpenWeather(QWidget *aParent, QString aAppId) : QWidget(aParent),
-    mAppId(aAppId)
+OpenWeather::OpenWeather(QString aAppId, QString aId, QWidget *aParent) : QWidget(aParent),
+    mAppId(aAppId), mId(aId)
 {
     setupUi(this);
     forecastList->setItemDelegate(new WeatherItemDelegate(forecastList));
+    forecastList->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     mNam = new QNetworkAccessManager(this);
     Q_CHECK_PTR(mNam);
 
-    mUlr = new QUrl();
-    Q_CHECK_PTR(mUlr);
+    mUrl = new QUrl();
+    Q_CHECK_PTR(mUrl);
 
-    mUlr->setScheme("http");
-    mUlr->setHost("api.openweathermap.org");
+    mUrl->setScheme("http");
+    mUrl->setHost("api.openweathermap.org");
 
     mLang = locale().bcp47Name();
     updateTime();
@@ -29,23 +30,24 @@ OpenWeather::OpenWeather(QWidget *aParent, QString aAppId) : QWidget(aParent),
     mClockTimer = startTimer(1000);
     mWeatherTimer = startTimer(300000);
 
-    getWeather(QString("3081368"));
-    getForecast(QUrl("http://api.openweathermap.org/data/2.5/forecast?units=metric&id=3081368&appid=" + mAppId + "&lang=" + mLang));
-
     mDevices = (UdevSingleton::get())->getDevice("backlight");
     qDebug() << "Got: " << mDevices.size() << "devices";
+
+    getWeather(mId);
+    getForecast(mId);
 }
 
 OpenWeather::~OpenWeather()
 {
     Udev *udev = UdevSingleton::get();
-    delete mUlr;
     // release devices if any
     if (!mDevices.isEmpty()) {
         for (QVector<udev_device *>::iterator it = mDevices.begin(); it < mDevices.end(); it++) {
             udev->releaseDev(*it);
         }
     }
+
+    delete mUrl;
 }
 
 void OpenWeather::updateTime(void)
@@ -59,8 +61,8 @@ void OpenWeather::updateTime(void)
 
 void OpenWeather::updateWeather(void)
 {
-    getWeather(QString("3081368"));
-    getForecast(QUrl("http://api.openweathermap.org/data/2.5/forecast?units=metric&id=3081368&appid=" + mAppId + "&lang=" + mLang));
+    getWeather(mId);
+    getForecast(mId);
 }
 
 void OpenWeather::timerEvent(QTimerEvent *event)
@@ -165,7 +167,7 @@ void OpenWeather::onWeatherRpl()
 
 int OpenWeather::getWeather(const QString &aId)
 {
-    mUlr->setPath("/data/2.5/weather");
+    mUrl->setPath("/data/2.5/weather");
 
     QUrlQuery urlQ;
     urlQ.addQueryItem("appid", mAppId);
@@ -173,9 +175,9 @@ int OpenWeather::getWeather(const QString &aId)
     urlQ.addQueryItem("units", "metric");
     urlQ.addQueryItem("lang", mLang);
 
-    mUlr->setQuery(urlQ);
+    mUrl->setQuery(urlQ);
 
-    return getWeather(*mUlr);
+    return getWeather(*mUrl);
 }
 
 int OpenWeather::getWeather(QUrl &aUrl)
@@ -255,7 +257,7 @@ void OpenWeather::parseForecastRpl(QNetworkReply *aRpl)
             WeatherListItem *item = parseForecastJson(jListObj);
             if (item)
               forecastList->addItem(item);
-         }
+        }
     } else {
         parseForecastJson(jObj);
     }
@@ -274,6 +276,18 @@ void OpenWeather::onForecastRpl()
     }
 
     netRpl->deleteLater();
+}
+
+int OpenWeather::getForecast(const QString &aId)
+{
+    mUrl->setPath("/data/2.5/forecast");
+    QUrlQuery urlQuery;
+    urlQuery.addQueryItem("appid", mAppId);
+    urlQuery.addQueryItem("lang", mLang);
+    urlQuery.addQueryItem("units", "metric");
+    urlQuery.addQueryItem("id", aId);
+
+    return getForecast(*mUrl);
 }
 
 int OpenWeather::getForecast(const QUrl &aUrl)
