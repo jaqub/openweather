@@ -46,3 +46,13 @@ QVector<udev_device *> Udev::getDevice(const char *aSubsystem)
     udev_enumerate_unref(enumerate);
     return devices;
 }
+
+void Udev::releaseDev(udev_device *aDevice)
+{
+   Q_CHECK_PTR(aDevice);
+
+   if (!aDevice)
+       return;
+
+   udev_device_unref(aDevice);
+}

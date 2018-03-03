@@ -32,18 +32,19 @@ OpenWeather::OpenWeather(QWidget *aParent, QString aAppId) : QWidget(aParent),
     getWeather(QString("3081368"));
     getForecast(QUrl("http://api.openweathermap.org/data/2.5/forecast?units=metric&id=3081368&appid=" + mAppId + "&lang=" + mLang));
 
-    mUdev = UdevSingleton::get();
-    mDevices = mUdev->getDevice("backlight");
+    mDevices = (UdevSingleton::get())->getDevice("backlight");
     qDebug() << "Got: " << mDevices.size() << "devices";
 }
 
 OpenWeather::~OpenWeather()
 {
+    Udev *udev = UdevSingleton::get();
     delete mUlr;
     // release devices if any
     if (!mDevices.isEmpty()) {
-        for (QVector<udev_device *>::iterator it = mDevices.begin(); it < mDevices.end(); it++)
-            udev_device_unref(*it);
+        for (QVector<udev_device *>::iterator it = mDevices.begin(); it < mDevices.end(); it++) {
+            udev->releaseDev(*it);
+        }
     }
 }
 

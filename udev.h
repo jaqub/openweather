@@ -10,6 +10,8 @@ public:
     Udev();
 
     QVector<udev_device*> getDevice(const char* aSubsystem);
+
+    void releaseDev(udev_device *aDevice);
 private:
     udev *mUdev;
 };
