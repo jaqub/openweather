@@ -9,7 +9,7 @@
 #include "weatherlistitem.h"
 
 OpenWeather::OpenWeather(QString aAppId, QString aId, QWidget *aParent) : QWidget(aParent),
-    mAppId(aAppId), mId(aId)
+    mAppId(aAppId), mId(aId), mBacklightDevice(nullptr)
 {
     setupUi(this);
     forecastList->setItemDelegate(new WeatherItemDelegate(forecastList));
