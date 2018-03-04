@@ -52,6 +52,7 @@ private:
     QUrl *mUrl;
     QNetworkAccessManager *mNam;
     QVector<Device *> mDevices;
+    Device *mBacklightDevice;
 };
 
 #endif // OPENWEATHER_H
