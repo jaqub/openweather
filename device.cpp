@@ -21,9 +21,10 @@ QStringList Device::getAttrNameList()
 
    udev_list_entry_foreach(attr, attrs) {
       const char *attrName = udev_list_entry_get_name(attr);
-      qDebug() << mName << "- found ATTR:" << attrName;
       attrList.append(attrName);
    }
+
+   qDebug() << mName << "has" << attrList.size() << "attributes" << attrList;
 
    return attrList;
 }
