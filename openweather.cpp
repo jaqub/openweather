@@ -28,12 +28,14 @@ OpenWeather::OpenWeather(QString aAppId, QString aId, QWidget *aParent) : QWidge
     updateTime();
 
     mClockTimer = startTimer(1000);
+
+    //Update weather and forecast every 5 min.
     mWeatherTimer = startTimer(300000);
 
-    mDevices = (UdevSingleton::get())->getDeviceBySysname("intel_backlight");
-    for (auto it = mDevices.begin(); it < mDevices.end(); it++)
-        qDebug() << (*it)->getAttrValue("brightness");
-
+    mDevices = (UdevSingleton::get())->getDeviceBySysname("rpi_backlight", "backlight");
+    for (auto it = mDevices.begin(); it < mDevices.end(); it++) {
+        (*it)->getAttrNameList();
+    }
     getWeather(mId);
     getForecast(mId);
 }

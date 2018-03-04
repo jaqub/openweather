@@ -10,7 +10,7 @@ class Udev
 public:
     Udev();
 
-    QVector<Device *> getDeviceBySysname(const char *aSysName);
+    QVector<Device *> getDeviceBySysname(const char *aSysName, const char *aSubsytem = nullptr);
 
     QVector<Device *> getDevicesFromSubsystem(const char *aSubsystem);
 
