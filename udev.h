@@ -12,7 +12,7 @@ public:
 
     QVector<Device *> getDeviceBySysname(const char *aSysName);
 
-    QVector<Device *> getDevice(const char* aSubsystem);
+    QVector<Device *> getDevicesFromSubsystem(const char *aSubsystem);
 
 private:
     udev *mUdev;
