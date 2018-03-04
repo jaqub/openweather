@@ -44,7 +44,7 @@ OpenWeather::~OpenWeather()
 {
     // release devices if any
     if (!mDevices.isEmpty()) {
-        for (QVector<Device *>::iterator it = mDevices.begin(); it < mDevices.end(); it++) {
+        for (auto it = mDevices.begin(); it < mDevices.end(); it++) {
             delete *it;
         }
     }
