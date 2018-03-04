@@ -8,7 +8,7 @@ Udev::Udev()
     Q_CHECK_PTR(mUdev);
 }
 
-QVector<Device *> Udev::getDeviceBySysname(const char *aSysName)
+QVector<Device *> Udev::getDeviceBySysname(const char *aSysName, const char *aSubsytem)
 {
     QVector<Device *> devices;
 
@@ -22,7 +22,13 @@ QVector<Device *> Udev::getDeviceBySysname(const char *aSysName)
 
     //Add filters
     if (udev_enumerate_add_match_sysname(enumerate, aSysName) < 0) {
-        qWarning() << "Failed to" << aSysName << "as match data";
+        qWarning() << "Failed to add" << aSysName << "to match data";
+        udev_enumerate_unref(enumerate);
+        return devices;
+    }
+
+    if (aSubsytem && (udev_enumerate_add_match_subsystem(enumerate, aSubsytem) < 0)) {
+        qWarning() << "Failed to add" << aSubsytem << "to match data";
         udev_enumerate_unref(enumerate);
         return devices;
     }
