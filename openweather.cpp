@@ -31,7 +31,7 @@ OpenWeather::OpenWeather(QString aAppId, QString aId, QWidget *aParent) : QWidge
     mWeatherTimer = startTimer(300000);
 
     mDevices = (UdevSingleton::get())->getDevice("backlight");
-    qDebug() << "Got: " << mDevices.size() << "devices";
+    qDebug() << "Got" << mDevices.size() << "devices";
 
     getWeather(mId);
     getForecast(mId);
@@ -70,8 +70,10 @@ void OpenWeather::timerEvent(QTimerEvent *event)
     int timerId = event->timerId();
     if (timerId == mClockTimer)
         updateTime();
-    else if (timerId == mWeatherTimer)
+    else if (timerId == mWeatherTimer) {
         updateWeather();
+        qInfo() << "Wather timer expired";
+    }
 }
 
 void OpenWeather::parseWeatherJson(QJsonDocument &aJsonDoc)
@@ -116,15 +118,23 @@ void OpenWeather::parseWeatherJson(QJsonDocument &aJsonDoc)
             if (jWeatherObj.contains("icon") && jWeatherObj["icon"].isString()) {
                 QString url = QString("http://openweathermap.org/img/w/%1.png").arg(jWeatherObj["icon"].toString());
                 QNetworkReply *rpl = mNam->get(QNetworkRequest(QUrl(url)));
+
+                qDebug() << "Request send:" << rpl << url;
+
                 connect(rpl, &QNetworkReply::finished, [=] () {
                     QPixmap pixmap;
                     pixmap.loadFromData(rpl->readAll());
                     icon->setPixmap(pixmap);
+
+                    qDebug() << "Reply received:" << rpl;
+
                     rpl->deleteLater();
                 });
             }
         }
     }
+
+    qDebug() << "Got weather information:" << main << description;
 
     setMain(main);
     setDescription(description);
@@ -151,13 +161,14 @@ void OpenWeather::onWeatherRpl()
 {
     QNetworkReply *netRpl = qobject_cast<QNetworkReply*>(sender());
 
+    qInfo() << "Weather response received:" << netRpl << netRpl->error();
+
     if (netRpl->isFinished()) {
         if (netRpl->error()) {
-            qWarning() <<  "Request finished with error:" << netRpl->errorString();
+            qDebug() << netRpl->errorString();
             setMain("Host request error");
             setDescription(netRpl->errorString());
         } else {
-            qDebug() << "Got response from server";
             parseWeatherRpl(netRpl);
         }
 
@@ -185,10 +196,10 @@ int OpenWeather::getWeather(QUrl &aUrl)
 
     QNetworkReply *netRpl;
     netRpl = mNam->get(QNetworkRequest(aUrl));
-    Q_CHECK_PTR(netRpl);
 
     connect(netRpl, &QNetworkReply::finished, this, &OpenWeather::onWeatherRpl);
 
+    qInfo() << "Weather request send:" << netRpl << aUrl.toString(QUrl::RemoveQuery);
     return 0;
 }
 
@@ -269,8 +280,10 @@ void OpenWeather::onForecastRpl()
 {
     QNetworkReply *netRpl = qobject_cast<QNetworkReply*>(sender());
 
+    qInfo() << "Forecast response received:" << netRpl << netRpl->error();
+
     if (netRpl->error()) {
-        qDebug() << "Request finished with error:" << netRpl->errorString();
+        qDebug() << netRpl->errorString();
     } else {
         parseForecastRpl(netRpl);
     }
@@ -294,9 +307,9 @@ int OpenWeather::getForecast(const QUrl &aUrl)
 {
     QNetworkReply *netRpl;
     netRpl = mNam->get(QNetworkRequest(aUrl));
-    Q_CHECK_PTR(netRpl);
 
     connect(netRpl, &QNetworkReply::finished, this, &OpenWeather::onForecastRpl);
 
+    qDebug() << "Forecast request send:" << netRpl << aUrl.toString(QUrl::RemoveQuery);
     return 0;
 }

@@ -2,6 +2,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QDebug>
+#include <QDateTime>
 
 Logger Logger::mInstance;
 
@@ -26,6 +27,8 @@ Logger::Logger() : mFileName(QStringLiteral(LOG_PATH) + QStringLiteral("openWeat
     Q_ASSERT_X(ret, "Logger", "Log file cannot be created");
 
     setDevice(mLogFile);
+
+    *this << QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd hh:mm:ss")) << endl;
 }
 
 Logger::~Logger()

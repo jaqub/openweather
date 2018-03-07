@@ -16,7 +16,7 @@ QVector<udev_device *> Udev::getDevice(const char *aSubsystem)
 
     // Add filters
     if (udev_enumerate_add_match_subsystem(enumerate, aSubsystem) < 0) {
-        qDebug() << "Failed to add subsystem: " << aSubsystem << "to match data";
+        qDebug() << "Failed to add subsystem:" << aSubsystem << "to match data";
         udev_enumerate_unref(enumerate);
         return devices;
     }
@@ -39,7 +39,7 @@ QVector<udev_device *> Udev::getDevice(const char *aSubsystem)
     udev_list_entry *item;
     udev_list_entry_foreach(item, items) {
         const char *devName = udev_list_entry_get_name(item);
-        qDebug() << "Device found: " << devName;
+        qDebug() << "Device found:" << devName;
         udev_device *device = udev_device_new_from_syspath(mUdev, devName);
         devices.append(device);
     }

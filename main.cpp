@@ -7,25 +7,27 @@
 
 void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
-    QByteArray localMsg = msg.toLocal8Bit();
-
-    Logger::get() << QTime::currentTime().toString(QStringLiteral("hh:mm:ss.zzz"));
+    QString logMsg = (QStringLiteral("\t%1 %2 %3 %4"))
+    .arg(QTime::currentTime().toString(QStringLiteral("hh:mm:ss.zzz")))
+    .arg(context.file)
+    .arg(context.line)
+    .arg(msg);
 
     switch (type) {
     case QtDebugMsg:
-        Logger::get() << " [Debug] " << localMsg.constData() << endl;
+        Logger::get() << left << "[Debug]" << logMsg << endl;
         break;
     case QtInfoMsg:
-        Logger::get() << " [Info] " << localMsg.constData() << endl;
+        Logger::get() << left << "[Info]" << logMsg << endl;
         break;
     case QtWarningMsg:
-        Logger::get() << " [Warning] " << context.file << context.line << context.function << localMsg.constData() << endl;
+        Logger::get() << left << "[Warning]" << logMsg << endl;
         break;
     case QtCriticalMsg:
-        Logger::get() << " [Critical] " << context.file << context.line << context.function << localMsg.constData() << endl;
+        Logger::get() << left << "[Critical]" << logMsg << endl;
         break;
     case QtFatalMsg:
-        Logger::get() << " [Fatal] " << context.file << context.line << context.function << localMsg.constData() << endl;
+        Logger::get() << left << "[Fatal]" << logMsg << endl;
         abort();
     }
 }
@@ -45,15 +47,19 @@ int main(int argc, char *argv[])
 
     parser.process(a);
 
-    if (!parser.isSet(appIdOpt) || !parser.isSet(idOpt))
+    if (!parser.isSet(appIdOpt) || !parser.isSet(idOpt)) {
+        qWarning() << "Missing mandatory input parameter";
         parser.showHelp();
+    }
 
     QString appId = parser.value(appIdOpt);
     QString id = parser.value(idOpt);
 
     OpenWeather *openWeather = new OpenWeather(appId, id);
     openWeather->showFullScreen();
+
     int ret = a.exec();
+    qInfo() << "Application exit with return code:" << ret;
 
     delete openWeather;
 
