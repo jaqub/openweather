@@ -32,10 +32,8 @@ OpenWeather::OpenWeather(QString aAppId, QString aId, QWidget *aParent) : QWidge
     //Update weather and forecast every 5 min.
     mWeatherTimer = startTimer(300000);
 
-    mDevices = (UdevSingleton::get())->getDevicesFromSubsystem("backlight");
-    for (auto it = mDevices.begin(); it < mDevices.end(); it++) {
-        (*it)->getAttrNameList();
-    }
+    mDevices = UdevSingleton::get()->getDevicesFromSubsystem("backlight");
+
     getWeather(mId);
     getForecast(mId);
 }
@@ -47,7 +45,7 @@ OpenWeather::~OpenWeather()
     for (int i = 0; i < nDev; i++) {
         Device *dev = mDevices.takeFirst();
 
-        qDebug() << "Releasing device:" << dev->getSysName();
+        qDebug() << "Releasing device:" << dev->getSysName() << dev->getSubsystem();
         delete dev;
     }
 

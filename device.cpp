@@ -6,6 +6,7 @@ Device::Device(udev_device *aDevice) : mDevice(aDevice)
 {
     Q_CHECK_PTR(aDevice);
     mSysName = udev_device_get_sysname(mDevice);
+    mSubsystem = udev_device_get_subsystem(mDevice);
 }
 
 QStringList Device::getAttrNameList()

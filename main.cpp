@@ -59,9 +59,10 @@ int main(int argc, char *argv[])
     openWeather->showFullScreen();
 
     int ret = a.exec();
-    qInfo() << "Application exit with return code:" << ret;
 
     delete openWeather;
+
+    qInfo() << "Application exit with return code:" << ret;
 
     return ret;
 }

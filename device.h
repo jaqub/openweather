@@ -12,6 +12,8 @@ public:
 
     const QByteArray& getSysName() { return mSysName; }
 
+    const QByteArray& getSubsystem() { return mSubsystem; }
+
     QStringList getAttrNameList();
 
     QByteArray getAttrValue(char *aAttrName);
@@ -21,7 +23,10 @@ public:
 private:
 
     udev_device *mDevice;
+
     QByteArray mSysName;
+
+    QByteArray mSubsystem;
 };
 
 #endif // DEVICE_H
