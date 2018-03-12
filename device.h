@@ -10,6 +10,8 @@ public:
 
     virtual ~Device() { udev_device_unref(mDevice); }
 
+    const QByteArray& getSysName() { return mSysName; }
+
     QStringList getAttrNameList();
 
     QByteArray getAttrValue(char *aAttrName);
@@ -19,7 +21,7 @@ public:
 private:
 
     udev_device *mDevice;
-    QByteArray mName;
+    QByteArray mSysName;
 };
 
 #endif // DEVICE_H

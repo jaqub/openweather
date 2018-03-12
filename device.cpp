@@ -5,7 +5,7 @@
 Device::Device(udev_device *aDevice) : mDevice(aDevice)
 {
     Q_CHECK_PTR(aDevice);
-    mName = udev_device_get_sysname(mDevice);
+    mSysName = udev_device_get_sysname(mDevice);
 }
 
 QStringList Device::getAttrNameList()
@@ -15,7 +15,7 @@ QStringList Device::getAttrNameList()
 
    attrs = udev_device_get_sysattr_list_entry(mDevice);
    if (attrs == nullptr) {
-      qWarning() << "ATTR list for" << mName << "not found";
+      qWarning() << "ATTR list for" << mSysName << "not found";
       return attrList;
    }
 
@@ -24,7 +24,7 @@ QStringList Device::getAttrNameList()
       attrList.append(attrName);
    }
 
-   qDebug() << mName << "has" << attrList.size() << "attributes" << attrList;
+   qDebug() << mSysName << "has" << attrList.size() << "attributes" << attrList;
 
    return attrList;
 }
@@ -40,7 +40,7 @@ QByteArray Device::getAttrValue(char *aAttrName)
     if (value == nullptr)
         qWarning() << aAttrName << "not found";
 
-    qDebug() << mName << "ATTR:" << aAttrName << ":" << value;
+    qDebug() << mSysName << "ATTR:" << aAttrName << ":" << value;
 
     return value;
 }
@@ -51,7 +51,7 @@ int Device::setAttrValue(char *aAttrName, char *aValue)
     if (ret < 0)
         qWarning() << "Failed to set" << aAttrName << "with" << aValue;
 
-    qDebug() << mName << "ATTR:" << aAttrName << "set to" << aValue;
+    qDebug() << mSysName << "ATTR:" << aAttrName << "set to" << aValue;
 
     return ret;
 }
