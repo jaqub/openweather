@@ -43,11 +43,14 @@ OpenWeather::OpenWeather(QString aAppId, QString aId, QWidget *aParent) : QWidge
 OpenWeather::~OpenWeather()
 {
     // release devices if any
-    if (!mDevices.isEmpty()) {
-        for (auto it = mDevices.begin(); it < mDevices.end(); it++) {
-            delete *it;
-        }
+    int  nDev = mDevices.size();
+    for (int i = 0; i < nDev; i++) {
+        Device *dev = mDevices.takeFirst();
+
+        qDebug() << "Releasing device:" << dev->getSysName();
+        delete dev;
     }
+
 
     delete mUrl;
 }
