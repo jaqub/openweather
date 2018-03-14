@@ -30,7 +30,7 @@ QStringList Device::getAttrNameList()
    return attrList;
 }
 
-QByteArray Device::getAttrValue(char *aAttrName)
+QByteArray Device::getAttrValue(const char *aAttrName)
 {
     if (aAttrName == nullptr) {
         qInfo() << "Attr name set to null";
@@ -38,20 +38,23 @@ QByteArray Device::getAttrValue(char *aAttrName)
     }
 
     const char *value = udev_device_get_sysattr_value(mDevice, aAttrName);
-    if (value == nullptr)
+    if (value == nullptr) {
         qWarning() << aAttrName << "not found";
+        return value;
+    }
 
     qDebug() << mSysName << "ATTR:" << aAttrName << ":" << value;
 
     return value;
 }
 
-int Device::setAttrValue(char *aAttrName, char *aValue)
+int Device::setAttrValue(const char *aAttrName, char *aValue)
 {
     int ret = udev_device_set_sysattr_value(mDevice, aAttrName, aValue);
-    if (ret < 0)
+    if (ret < 0) {
         qWarning() << "Failed to set" << aAttrName << "with" << aValue;
-
+        return ret;
+    }
     qDebug() << mSysName << "ATTR:" << aAttrName << "set to" << aValue;
 
     return ret;

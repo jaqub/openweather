@@ -16,9 +16,9 @@ public:
 
     QStringList getAttrNameList();
 
-    QByteArray getAttrValue(char *aAttrName);
+    QByteArray getAttrValue(const char *aAttrName);
 
-    int setAttrValue(char *aAttrName, char *aValue);
+    int setAttrValue(const char *aAttrName, char *aValue);
 
 private:
 

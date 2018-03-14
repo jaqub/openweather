@@ -11,6 +11,7 @@
 #include "device.h"
 
 class WeatherListItem;
+class BacklightDev;
 
 class OpenWeather : public QWidget,
                     public Ui::OpenWeather
@@ -52,7 +53,7 @@ private:
     QUrl *mUrl;
     QNetworkAccessManager *mNam;
     QVector<Device *> mDevices;
-    Device *mBacklightDevice;
+    BacklightDev *mBacklightDev;
 };
 
 #endif // OPENWEATHER_H

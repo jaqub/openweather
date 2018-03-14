@@ -7,9 +7,10 @@
 
 #include "weatheritemdelegate.h"
 #include "weatherlistitem.h"
+#include "backlightdev.h"
 
 OpenWeather::OpenWeather(QString aAppId, QString aId, QWidget *aParent) : QWidget(aParent),
-    mAppId(aAppId), mId(aId), mBacklightDevice(nullptr)
+    mAppId(aAppId), mId(aId)
 {
     setupUi(this);
     forecastList->setItemDelegate(new WeatherItemDelegate(forecastList));
@@ -33,6 +34,7 @@ OpenWeather::OpenWeather(QString aAppId, QString aId, QWidget *aParent) : QWidge
     mWeatherTimer = startTimer(300000);
 
     mDevices = UdevSingleton::get()->getDevicesFromSubsystem("backlight");
+    mBacklightDev = new BacklightDev(nullptr, this);
 
     getWeather(mId);
     getForecast(mId);
