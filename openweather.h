@@ -45,6 +45,8 @@ private:
     int getForecast(const QString &aId);
     int getForecast(const QUrl &aUrl);
 
+    void setupBrightness();
+
     const QString mAppId;
     const QString mId;
     QString mLang;
@@ -52,7 +54,6 @@ private:
     int mWeatherTimer;
     QUrl *mUrl;
     QNetworkAccessManager *mNam;
-    QVector<Device *> mDevices;
     BacklightDev *mBacklightDev;
 };
 
