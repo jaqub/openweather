@@ -6,6 +6,10 @@ BacklightDev::BacklightDev(Device *device, QObject *parent) : QObject(parent)
 {
    Q_ASSERT(device != nullptr);
    mDevice = device;
+
+   mMaxBrightness = mDevice->getAttrValue("max_brightness").toInt();
+}
+
 }
 
 int BacklightDev::getBrightness()

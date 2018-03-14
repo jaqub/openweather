@@ -12,7 +12,7 @@ public:
 
     virtual ~BacklightDev() {}
 
-    int getMaxBrightness();
+    int getMaxBrightness() { return mMaxBrightness; }
 
     int getBrightness();
 
@@ -25,6 +25,8 @@ public slots:
 private:
 
     Device *mDevice;
+
+    int mMaxBrightness;
 };
 
 #endif // BACKLIGHTDEV_H
