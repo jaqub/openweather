@@ -10,7 +10,7 @@ class BacklightDev : public QObject
 public:
     explicit BacklightDev(Device *device, QObject *parent = nullptr);
 
-    virtual ~BacklightDev() {}
+    virtual ~BacklightDev();
 
     int getMaxBrightness() { return mMaxBrightness; }
 

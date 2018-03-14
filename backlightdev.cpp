@@ -10,6 +10,10 @@ BacklightDev::BacklightDev(Device *device, QObject *parent) : QObject(parent)
    mMaxBrightness = mDevice->getAttrValue("max_brightness").toInt();
 }
 
+BacklightDev::~BacklightDev()
+{
+    if (mDevice)
+      delete mDevice;
 }
 
 int BacklightDev::getBrightness()
