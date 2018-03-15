@@ -10,7 +10,7 @@
 #include "backlightdev.h"
 
 OpenWeather::OpenWeather(QString aAppId, QString aId, QWidget *aParent) : QWidget(aParent),
-    mAppId(aAppId), mId(aId)
+    mAppId(aAppId), mId(aId), mBacklightDev(nullptr), mBacklightTimer(nullptr)
 {
     setupUi(this);
     forecastList->setItemDelegate(new WeatherItemDelegate(forecastList));
@@ -34,6 +34,14 @@ OpenWeather::OpenWeather(QString aAppId, QString aId, QWidget *aParent) : QWidge
     mWeatherTimer = startTimer(300000);
 
     setupBrightness();
+    if (mBacklightDev) {
+
+        mBacklightTimer = new QTimer(this);
+        connect(mBacklightTimer, &QTimer::timeout, this, &OpenWeather::onBacklightTimer);
+        mBacklightTimer->start(5000);
+
+        forecastList->viewport()->installEventFilter(this);
+    }
 
     getWeather(mId);
     getForecast(mId);
@@ -41,6 +49,9 @@ OpenWeather::OpenWeather(QString aAppId, QString aId, QWidget *aParent) : QWidge
 
 OpenWeather::~OpenWeather()
 {
+    if (mBacklightDev)
+        mBacklightDev->setBrightness(mBacklightDev->getMaxBrightness());
+
     delete mUrl;
 }
 
@@ -59,14 +70,33 @@ void OpenWeather::updateWeather(void)
     getForecast(mId);
 }
 
+bool OpenWeather::eventFilter(QObject *watched, QEvent *event)
+{
+    Q_UNUSED(watched);
+
+    if (event->type() == QEvent::MouseButtonPress) {
+        qDebug() << "Touch event received";
+        mBacklightDev->setBrightness(mBacklightDev->getMaxBrightness());
+        mBacklightTimer->start(300000);
+    }
+
+    return false;
+}
+
+void OpenWeather::onBacklightTimer() {
+       qDebug() << "Backlight timer expired";
+       mBacklightTimer->stop();
+       mBacklightDev->setBrightness(0);
+}
+
 void OpenWeather::timerEvent(QTimerEvent *event)
 {
     int timerId = event->timerId();
     if (timerId == mClockTimer)
         updateTime();
     else if (timerId == mWeatherTimer) {
-        updateWeather();
         qInfo() << "Wather timer expired";
+        updateWeather();
     }
 }
 
@@ -310,16 +340,12 @@ int OpenWeather::getForecast(const QUrl &aUrl)
 
 void OpenWeather::setupBrightness()
 {
-    QVector<Device *> mDevices;
 
-    mDevices = UdevSingleton::get()->getDevicesFromSubsystem("backlight");
-    if (mDevices.empty())
+    Device *dev = UdevSingleton::get()->getDeviceBySysname("rpi_backlight", "backlight");
+    if (!dev) {
+        qDebug() << "rpi_backlight device not found";
         return;
-
-    mBacklightDev = new BacklightDev(mDevices.takeFirst(), this);
-
-    while (!mDevices.isEmpty()) {
-        Device *dev = mDevices.takeFirst();
-        delete dev;
     }
+
+    mBacklightDev = new BacklightDev(dev, this);
 }

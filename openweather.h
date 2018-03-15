@@ -29,7 +29,11 @@ private slots:
   void onWeatherRpl();
   void onForecastRpl();
 
+  void onBacklightTimer();
+
 private:
+    bool eventFilter(QObject *watched, QEvent *event);
+
     void timerEvent(QTimerEvent *event = nullptr);
 
     void updateTime(void);
@@ -52,9 +56,12 @@ private:
     QString mLang;
     int mClockTimer;
     int mWeatherTimer;
+
+    BacklightDev *mBacklightDev;
+    QTimer *mBacklightTimer;
+
     QUrl *mUrl;
     QNetworkAccessManager *mNam;
-    BacklightDev *mBacklightDev;
 };
 
 #endif // OPENWEATHER_H
